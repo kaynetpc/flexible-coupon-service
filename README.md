@@ -1,0 +1,2 @@
+# flexible-coupon-service
+This repository presents an example of using Sequelize in a project with Express. It demonstrates how to implement a RESTful API for an e-commerce website that includes a flexible coupon system. The coupon system APIs allow for different discount strategies without requiring major rewrites in the future. The project uses Express.js as the web framework and Sequelize ORM to interact with the database.
