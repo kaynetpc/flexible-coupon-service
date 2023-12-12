@@ -92,7 +92,7 @@ export class CouponService {
     static getCouponByCode = async (code: string): Promise<IResponseService<CouponModel | null>> => {
         
         try {
-          console.log('he code    ', code)
+
           const coupon = await CouponModel.findOne({where: { code: code.toLowerCase() }});
             
             if (!coupon) {
@@ -149,15 +149,14 @@ export class CouponService {
         
         try {
             const isExist = await CouponModel.findOne({
-                where: { code },
+                where: { code: code.toLowerCase() },
               });
 
               if (!isExist) {
                 return {hasError: true, message: 'Coupon not found', statusCode: 404, data: null };      
               }
-            const result = await CouponModel.destroy({  where: { code } });
-
-            console.log(result)
+            
+             await CouponModel.destroy({  where: { code } });
           
           
             return {hasError: false, message: 'Deleted', statusCode: 200, data: null };      
@@ -200,8 +199,7 @@ const calculateDiscount = (coupon: CouponModel, cartTotal: number) => {
     case DiscountType.FIXED_AMOUNT: 
       {
         const discount = (discounts?.amount || 0);
-        const amount = calculateFixedAmountDiscount(cartTotal, 5000)
-        console.log('::::::::::::::::::;______', cartTotal, calculateFixedAmountDiscount(cartTotal, discount))
+        const amount = calculateFixedAmountDiscount(cartTotal, discount)
         return { adjustedPrice: amount, discountAmount: discount };
       }
     case DiscountType.PERCENT: 
@@ -216,7 +214,6 @@ const calculateDiscount = (coupon: CouponModel, cartTotal: number) => {
         const fixedAmountDiscount = calculateFixedAmountDiscount(cartTotal, discounts?.amount || 0);
         const percentDiscount = cartTotal - calculatePercentDiscount(cartTotal, discounts?.percent || 0);
         const discount = Math.max(fixedAmountDiscount, percentDiscount);
-        console.log('--------------', {percentDiscount, discount})
         return { adjustedPrice: discount, discountAmount: cartTotal - discount}
       }
     default: return { adjustedPrice: cartTotal, discountAmount: 0 }
