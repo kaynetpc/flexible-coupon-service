@@ -156,7 +156,7 @@ export class CouponService {
                 return {hasError: true, message: 'Coupon not found', statusCode: 404, data: null };      
               }
             
-             await CouponModel.destroy({  where: { code } });
+             await CouponModel.destroy({  where: { code: code.toLowerCase() } });
           
           
             return {hasError: false, message: 'Deleted', statusCode: 200, data: null };      
